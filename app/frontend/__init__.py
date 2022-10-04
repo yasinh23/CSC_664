@@ -1,5 +1,5 @@
 import tkinter as tk
-from .screens import screen_list, start_screen
+from .screens import screen_list, start_screen, gallery_screen
 from app.backend.helpers import config
 from app import constants
 
@@ -37,6 +37,7 @@ class GUI(tk.Tk):
         if config.config_exists(constants.CONFIG_PATH):
             # if config file exists
             print('config file exists')
+            self.show_frame(gallery_screen)
         else:
             self.show_frame(start_screen)
 

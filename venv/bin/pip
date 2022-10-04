@@ -1,4 +1,4 @@
-#!/Users/fone/PycharmProjects/CSC_664/group_project/venv/bin/python
+#!/Users/fone/PycharmProjects/CSC_664/group_project/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
