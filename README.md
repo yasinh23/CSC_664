@@ -15,7 +15,7 @@ foo@bar:CSC_664$ pip install -r requirements.txt
 ```
 
 ## Download gallery images
-```shell
+```bash
 foo@bar:CSC_664$ python3 get_images.py --keyword "samuel l jackson" --max 10 --dest './gallery/'
 ```
 
@@ -25,7 +25,7 @@ This will download a maximum of 10 images to a folder named gallery located in t
 You can download pictures of multiple people or groups of people to have more images for facial recognition
 
 ## Run Program
-```shell
+```bash
 foo@bar:CSC_664$ python3 main.py
 ```
 
