@@ -1,38 +1,49 @@
 import io
-import os
 import json
-from app.constants import ROOT_DIR
 
 
-def config_exists(path):
-    path = path
-    if os.path.exists(path):
+class Config:
+    def __init__(self, path):
+        self.path = path
+        self.file = self._open_or_create_file(path)
+        self.params = self._config_to_dict(self.file)
+
+    def set_config(self, k, v):
+        self.params[k] = v
+        self.save_file()
+
+    def get_config(self, k):
+        try:
+            return self.params[k]
+        except KeyError:
+            return None
+
+    def save_file(self):
+        self.file.truncate(0)
+        self.file.write(json.dumps(self.params))
+        self._flush()
+
+    def has_required_configs(self, configs):
+        for c in configs:
+            if not self.get_config(c):
+                return False
         return True
-    return False
 
+    def _flush(self):
+        self.file.close()
+        self.file = self._open_or_create_file(self.path)
+        self.params = self._config_to_dict(self.file)
 
-def create_config(path):
-    f = open(f"{path}", "a")
-    return f
+    def _open_or_create_file(self, path):
+        f = open(f"{path}", "w+")
+        return f
 
-
-def load_config(s):
-    """
-    :param s: config file plain text
-    :return dict: config file as dictionary if file is populated; empty dict if not
-    """
-    try:
-        return json.load(s)
-    except io.UnsupportedOperation:
-        return dict()
-
-
-def write_config(f, j):
-    f.write(json.dumps(j))
-    f.close()
-
-
-def get_gallery_dir():
-    f = open(f"{ROOT_DIR}/.config", "r")
-    d = load_config(f)
-    return d['gallery_folder']
+    def _config_to_dict(self, s):
+        """
+        :param s: config file plain text
+        :return dict: config file as dictionary if file is populated; empty dict if not
+        """
+        try:
+            return json.load(s)
+        except json.decoder.JSONDecodeError:
+            return dict()

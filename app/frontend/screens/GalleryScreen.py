@@ -1,52 +1,50 @@
 import tkinter as tk
-from tkinter import ttk
-from tkinter import filedialog
-from app.backend.helpers import config, color
-from app import constants
-import os
+from app.constants import CONFIG_FILE, GALLERY_CARD_SIZE, GALLERY_ROWS, GALLERY_COL
 from PIL import ImageTk, Image
-from app.frontend.components import GalleryImage
+from app.frontend.frames.gallery import Grid, SortMenu
 
 
 class GalleryScreen(tk.Frame):
     # This page displays when users first startup program and/or when configurations aren't set
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        self.gallery_dir = config.get_gallery_dir()
-        self.images = []
-        entries = os.listdir(self.gallery_dir)
+        self.sort_menu = SortMenu.SortMenu(self, controller)
+        self.canvas = tk.Canvas(self, width=GALLERY_COL*GALLERY_CARD_SIZE, height=GALLERY_ROWS*GALLERY_CARD_SIZE)
+        self.grid = Grid.Grid(self, controller)
+        self.scrollbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        self.grid.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(
+                scrollregion=self.canvas.bbox("all")
+            )
+        )
 
-        if len(entries):
-            img_path = f"{self.gallery_dir}/{entries[0]}"
-            img = GalleryImage(img_path)
-            img.set_delta_e()
-            self.images.append(img)
 
-            for entry in entries[1:]:
-                img_path = f"{self.gallery_dir}/{entry}"
 
-                img = GalleryImage(img_path)
-                img.set_delta_e(ref=self.images[0].lab)
-                self.images.append(img)
+    def build(self):
+        self.grid.build()
+        self.grid.pack()
+        self.sort_menu.pack(side=tk.LEFT, fill='y')
+        self.canvas.pack(side=tk.LEFT, padx=(0, 50))
+        self.scrollbar.pack(side=tk.RIGHT, fill='y')
+        self.canvas.create_window((0, 0), window=self.grid, anchor="nw")
 
-        if len(self.images):
-            self.images.sort()
-            self.populate_grid()
+
 
     def populate_grid(self):
-        nr = 10  # number of rows
-        nc = 10  # number of columns
+        nr = GALLERY_ROWS  # number of rows
+        nc = GALLERY_COL  # number of columns
         idx = 0
 
         photo_list = []
 
         for i in range(nr * nc):
             try:
-                img = ImageTk.PhotoImage(self.images[idx].thumbnail)
-                print(self.images[idx].lab)
+                img = ImageTk.PhotoImage(self.images[idx].img)
             except IndexError:
                 break
-            lbl = tk.Label(self, image=img)
+            lbl = tk.Label(self.grid, image=img)
             lbl.img = img
             photo_list.append(lbl)
             photo_list[-1].grid(row=i // nc, column=i % nc)

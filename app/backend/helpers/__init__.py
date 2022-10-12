@@ -1,2 +1,1 @@
-from . import config
-from . import color
+from . import Config

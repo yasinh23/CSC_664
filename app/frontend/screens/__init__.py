@@ -1,7 +1,10 @@
 from . import StartScreen, GalleryScreen
+import tkinter as tk
+
 
 # page that shows when user installs
 start_screen = StartScreen.StartPage
+
 gallery_screen = GalleryScreen.GalleryScreen
 
 
