@@ -11,12 +11,12 @@ This program is currently being built using celebrity images scraped scraped fro
 using the [Excav8r](https://github.com/DSnoNintendo/excav8r.py) library included in this directory
 ## Install requirements
 ```shell
-foo@bar:CSC_664$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Download gallery images
 ```bash
-foo@bar:CSC_664$ python3 get_images.py --keyword "samuel l jackson" --max 10 --dest './gallery/'
+python3 get_images.py --keyword "samuel l jackson" --max 10 --dest './gallery/'
 ```
 
 This will download a maximum of 10 images to a folder named gallery located in the directory.
@@ -26,7 +26,7 @@ You can download pictures of multiple people or groups of people to have more im
 
 ## Run Program
 ```bash
-foo@bar:CSC_664$ python3 main.py
+python3 main.py
 ```
 
 Select directory containing images you want the UI to display. This filepath will be stored in a hidden file 
